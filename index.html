@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Taxi Nam Thắng</title>
+
+  <style>
+    /* Reset cơ bản */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+      background-color: #000; /* nền đen tránh viền trắng */
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* --- Ảnh full màn hình --- */
+    img {
+      display: block;
+      width: 100%;
+      height: auto;
+      vertical-align: middle;
+    }
+
+    /* --- Banner + icon --- */
+    .image-wrapper {
+      position: relative;
+      width: 100%;
+      line-height: 0; /* loại bỏ khoảng trắng giữa ảnh và icon */
+    }
+
+    .image-wrapper > img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .icon-row {
+      position: absolute;
+      top: 90%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+      z-index: 2;
+    }
+
+    .icon-row img {
+      width: 50%;
+      height: auto;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+      animation: shake-vertical 0.6s ease-in-out infinite;
+    }
+
+    .icon-row img:hover {
+      transform: scale(1.08);
+    }
+
+    /* --- Ảnh đội xe Long Xuyên --- */
+    .longxuyen-img {
+      border: none;
+      box-shadow: none;
+      margin: 0;
+    }
+
+    /* --- Ảnh dịch vụ --- */
+    #target-img {
+      border: none;
+      margin: 0;
+    }
+
+    /* --- Nút gọi cố định --- */
+    .call-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 70px;
+      height: 106px;
+      z-index: 9999;
+      transition: transform 0.2s ease-in-out;
+      animation: shake-phone 0.6s ease-in-out infinite;
+    }
+
+    .call-button:hover {
+      transform: scale(1.1);
+    }
+
+    .call-button img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* --- Hiệu ứng rung --- */
+    @keyframes shake-vertical {
+      0%, 100% { transform: translateY(0); }
+      25% { transform: translateY(-6px); }
+      75% { transform: translateY(6px); }
+    }
+
+    @keyframes shake-phone {
+      0%, 100% { transform: translateY(0); }
+      25% { transform: translateY(-8px); }
+      75% { transform: translateY(8px); }
+    }
+
+    /* --- Fade-in khi cuộn --- */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- Responsive --- */
+    @media (max-width: 768px) {
+      .icon-row {
+        gap: 14px;
+      }
+
+      .icon-row img {
+        width: 100px;
+      }
+
+      .image-wrapper,
+      .image-wrapper > img {
+        width: 100vw !important;
+        max-width: 100vw !important;
+      }
+
+      .call-button {
+        width: 60px;
+        height: 90px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Banner chính -->
+  <div class="image-wrapper">
+    <img src="./images/bgtx1-m.jpg" alt="Taxi Nam Thắng - banner" loading="eager" decoding="async">
+    <div class="icon-row">
+      <img src="./images/bt-dichvu.png" alt="Dịch vụ" loading="lazy" decoding="async">
+      <img src="./images/bt-lienhe.png" alt="Gọi 0372 535 656" loading="lazy" decoding="async">
+      <img src="./images/bt-zalo.png" alt="Zalo" loading="lazy" decoding="async">
+    </div>
+  </div>
+
+  <!-- Ảnh đội xe tại Long Xuyên -->
+  <img src="./images/namthanglongxuyen.png"
+       alt="Đội xe Taxi Nam Thắng tại Long Xuyên"
+       class="longxuyen-img fade-in"
+       loading="lazy"
+       decoding="async">
+
+  <!-- Nút gọi cố định -->
+  <a href="tel:0343535656" class="call-button" aria-label="Gọi 0343 535 656">
+    <img src="./images/call.gif" alt="Gọi điện">
+  </a>
+
+  <!-- Ảnh dịch vụ / nội dung tiếp theo -->
+  <img id="target-img" src="./images/bgtx2-m.jpg"
+       alt="Dịch vụ Taxi Nam Thắng"
+       class="fade-in"
+       loading="lazy"
+       decoding="async">
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Xử lý click icon
+      const icons = document.querySelectorAll('.icon-row img');
+      const target = document.getElementById('target-img');
+
+      icons.forEach(img => {
+        const src = img.getAttribute('src') || '';
+        img.addEventListener('click', () => {
+          if (src.includes('bt-lienhe.png')) {
+            window.location.href = 'tel:0372535656';
+          } else if (src.includes('bt-zalo.png')) {
+            window.open('https://zalo.me/0372535656', '_blank', 'noopener,noreferrer');
+          } else if (src.includes('bt-dichvu.png') && target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      // Hiệu ứng fade-in khi cuộn tới
+      const fadeElements = document.querySelectorAll('.fade-in');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.2 });
+
+      fadeElements.forEach(el => observer.observe(el));
+    });
+  </script>
+</body>
+</html>
